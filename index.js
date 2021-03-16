@@ -156,6 +156,7 @@ TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
     connectReq.removeAllListeners()
     socket.removeAllListeners()
 
+    socket.setNoDelay()
     if (res.statusCode === 200) {
       assert.equal(head.length, 0)
       debug('tunneling connection has established')
@@ -166,6 +167,7 @@ TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
       var error = new Error('tunneling socket could not be established, ' + 'statusCode=' + res.statusCode)
       error.code = 'ECONNRESET'
       options.request.emit('error', error)
+      socket.destroy()
       self.removeSocket(placeholder)
     }
   }
